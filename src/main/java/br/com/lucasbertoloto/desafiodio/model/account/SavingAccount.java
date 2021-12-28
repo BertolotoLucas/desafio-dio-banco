@@ -1,5 +1,6 @@
 package br.com.lucasbertoloto.desafiodio.model.account;
 
+import br.com.lucasbertoloto.desafiodio.exception.*;
 import br.com.lucasbertoloto.desafiodio.model.Client;
 
 import java.util.Objects;
@@ -7,9 +8,12 @@ import java.util.Objects;
 public class SavingAccount extends Account{
     private final long identification;
 
-    public SavingAccount(Client client) {
+    public SavingAccount(Client client) throws MaxNumberQuantityCheckingAccountsReachedException,
+            MaxNumberQuantityAccountsReachedException, MaxNumberQuantitySavingAccountsReachedException,
+            AddingSameAccountException, AccountWithAnotherClientException {
         this.client = client;
         this.balance = 0D;
+        client.addAccount(this);
         IDENTIFICATION = IDENTIFICATION + 1;
         this.identification =  IDENTIFICATION;
     }
@@ -37,7 +41,7 @@ public class SavingAccount extends Account{
         return "SavingAccount{" +
                 "identification=" + identification +
                 ", agency=" + AGENCY +
-                ", client=" + client.getNome() +
+                ", client=" + client.getName() +
                 ", balance=" + balance +
                 '}';
     }

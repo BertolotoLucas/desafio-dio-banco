@@ -5,8 +5,6 @@ import br.com.lucasbertoloto.desafiodio.exception.NegativeValueException;
 import br.com.lucasbertoloto.desafiodio.exception.NoValueException;
 import br.com.lucasbertoloto.desafiodio.model.Client;
 
-import java.util.Objects;
-
 public abstract class Account {
     protected static long IDENTIFICATION;
     protected static final int AGENCY = 1;
