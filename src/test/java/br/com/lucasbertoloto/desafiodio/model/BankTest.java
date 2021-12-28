@@ -1,10 +1,14 @@
 package br.com.lucasbertoloto.desafiodio.model;
 
+import br.com.lucasbertoloto.desafiodio.model.account.Account;
+import br.com.lucasbertoloto.desafiodio.model.account.CheckingAccount;
+import br.com.lucasbertoloto.desafiodio.model.account.SavingAccount;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BankTest {
 

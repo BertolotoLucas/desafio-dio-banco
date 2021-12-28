@@ -1,5 +1,7 @@
 package br.com.lucasbertoloto.desafiodio.model.account;
 
+import br.com.lucasbertoloto.desafiodio.model.Client;
+import br.com.lucasbertoloto.desafiodio.exception.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +53,7 @@ public class CheckingAccountTest {
 
     @Test
     void shouldReturnInsufficientBalance() {
-        Assertions.assertThrows(InsufficientBalance.class,
+        Assertions.assertThrows(InsufficientBalanceException.class,
                 () -> ac.withdraw(100D));
     }
 
