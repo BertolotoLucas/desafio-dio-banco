@@ -16,7 +16,8 @@ public class SavingAccountTest {
             MaxNumberQuantityAccountsReachedException, MaxNumberQuantitySavingAccountsReachedException,
             AddingSameAccountException, AccountWithAnotherClientException {
         client = new Client("Maycon");
-        ac = new SavingAccount(client);
+        ac = new SavingAccount();
+        client.addAccount(ac);
     }
 
     @Test
@@ -62,29 +63,20 @@ public class SavingAccountTest {
     void shouldReturnAMaxNumberQuantityAccountsReachedException() throws AccountWithAnotherClientException,
             MaxNumberQuantityCheckingAccountsReachedException, MaxNumberQuantityAccountsReachedException,
             MaxNumberQuantitySavingAccountsReachedException, AddingSameAccountException {
-        new CheckingAccount(client);
+        client.addAccount(new CheckingAccount(10D));
         Assertions.assertThrows(MaxNumberQuantityAccountsReachedException.class,
-                () -> new SavingAccount(client));
+                () -> client.addAccount(this.ac));
     }
 
     @Test
-    void shouldReturnAMaxNumberQuantitySavingAccountsReachedException() throws
-            MaxNumberQuantityCheckingAccountsReachedException, MaxNumberQuantityAccountsReachedException,
-            MaxNumberQuantitySavingAccountsReachedException, AddingSameAccountException,
-            AccountWithAnotherClientException {
-        client = new Client("Maycon");
-        Account ac1 = new SavingAccount(client);
+    void shouldReturnAMaxNumberQuantitySavingAccountsReachedException() {
         Assertions.assertThrows(MaxNumberQuantitySavingAccountsReachedException.class,
-                () -> new SavingAccount(client));
+                () -> client.addAccount(new SavingAccount()));
     }
 
     @Test
-    void shouldReturnAnAddingSameAccountException() throws MaxNumberQuantityCheckingAccountsReachedException,
-            MaxNumberQuantityAccountsReachedException, MaxNumberQuantitySavingAccountsReachedException,
-            AddingSameAccountException, AccountWithAnotherClientException {
-        client = new Client("Maycon");
-        Account ac1 = new SavingAccount(client);
-        Assertions.assertThrows(AddingSameAccountException.class, () -> client.addAccount(ac1));
+    void shouldReturnAnAddingSameAccountException() {
+        Assertions.assertThrows(AddingSameAccountException.class, () -> client.addAccount(ac));
     }
 
 }
