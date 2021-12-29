@@ -21,8 +21,10 @@ public class ClientTest {
             MaxNumberQuantityAccountsReachedException, MaxNumberQuantitySavingAccountsReachedException,
             AddingSameAccountException, AccountWithAnotherClientException {
         client = new Client("Maycon");
-        ac1 = new SavingAccount(client);
-        ac2 = new CheckingAccount(client);
+        ac1 = new SavingAccount();
+        ac2 = new CheckingAccount(10D);
+        client.addAccount(ac1);
+        client.addAccount(ac2);
     }
 
     @Test
@@ -30,7 +32,7 @@ public class ClientTest {
         List<Account> accountList = new ArrayList<>();
         accountList.add(ac1);
         accountList.add(ac2);
-        Assertions.assertTrue(client.getAccounts().equals(accountList));
+        Assertions.assertEquals(client.getAccounts(), accountList);
     }
 
     @Test
@@ -64,10 +66,8 @@ public class ClientTest {
     }
 
     @Test
-    void shouldReturnAnAccountNotFoundException() throws MaxNumberQuantityCheckingAccountsReachedException,
-            MaxNumberQuantityAccountsReachedException, MaxNumberQuantitySavingAccountsReachedException,
-            AddingSameAccountException, AccountWithAnotherClientException {
-        Account account = new CheckingAccount(new Client("Julio"));
+    void shouldReturnAnAccountNotFoundException(){
+        Account account = new CheckingAccount(10D);
         Assertions.assertThrows(AccountNotFoundException.class, () -> client.removeAccount(account));
     }
 

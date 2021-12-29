@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
-    protected static long LAST_IDENTIFICATION;
+    protected static long IDENTIFICATION;
     private final long identification;
+    private Bank bank;
     private String name;
     private final List<Account> accounts;
 
     public Client(String name) {
         this.name = name;
-        identification = LAST_IDENTIFICATION++;
+        identification = IDENTIFICATION++;
         accounts = new ArrayList<>();
     }
 
@@ -23,12 +24,21 @@ public class Client {
         return identification;
     }
 
+    public Bank getBank() {
+        return bank;
+    }
+
     public String getName() {
         return name;
     }
 
+
     public List<Account> getAccounts() {
         return accounts;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 
     public void setName(String name) {
@@ -49,9 +59,11 @@ public class Client {
                 else if (ac instanceof CheckingAccount && account instanceof CheckingAccount)
                     throw new MaxNumberQuantityCheckingAccountsReachedException();
             }
-            if (!account.getClient().equals(this))
-                throw new AccountWithAnotherClientException();
+            if (!(account.getClient() == null))
+                if (!account.getClient().equals(this))
+                    throw new AccountWithAnotherClientException();
             accounts.add(account);
+            account.setClient(this);
         }
     }
 
