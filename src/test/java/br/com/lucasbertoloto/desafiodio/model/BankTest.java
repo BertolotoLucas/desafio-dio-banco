@@ -1,5 +1,6 @@
 package br.com.lucasbertoloto.desafiodio.model;
 
+import br.com.lucasbertoloto.desafiodio.exception.*;
 import br.com.lucasbertoloto.desafiodio.model.account.Account;
 import br.com.lucasbertoloto.desafiodio.model.account.CheckingAccount;
 import br.com.lucasbertoloto.desafiodio.model.account.SavingAccount;
@@ -13,18 +14,33 @@ import java.util.List;
 public class BankTest {
 
     private Bank bank;
+    private Client c1;
+    private Client c2;
+    private Client c3;
+    private Account ac1;
+    private Account ac2;
+    private Account ac3;
+    private Account ac4;
 
     @BeforeEach
-    void initialize(){
+    void initialize() throws NoValueException, NegativeValueException,
+            MaxNumberQuantityCheckingAccountsReachedException, MaxNumberQuantityAccountsReachedException,
+            MaxNumberQuantitySavingAccountsReachedException, AddingSameAccountException,
+            AccountWithAnotherClientException, ClientAlreadyRegisteredException {
         bank = new Bank("MyBank");
-        Client c1 = new Client("Maicon");
-        Client c2 = new Client("Luiz");
-        Client c3 = new Client("Daniel");
+        c1 = new Client("Maicon");
+        c2 = new Client("Luiz");
+        c3 = new Client("Daniel");
 
-        Account ac1 = new SavingAccount(c1);
-        Account ac2 = new CheckingAccount(c2);
-        Account ac3 = new SavingAccount(c3);
-        Account ac4 = new CheckingAccount(c3);
+        ac1 = new SavingAccount();
+        ac2 = new CheckingAccount(10D);
+        ac3 = new SavingAccount();
+        ac4 = new CheckingAccount(10D);
+
+        c1.addAccount(ac1);
+        c2.addAccount(ac2);
+        c3.addAccount(ac3);
+        c3.addAccount(ac4);
 
         ac1.deposit(100D);
         ac2.deposit(100D);
@@ -38,50 +54,45 @@ public class BankTest {
 
     @Test
     void shouldReturnAListOfAllClients(){
-        List<Client> clientList = new ArrayList<Client>();
-
-        Client c1 = new Client("Maicon");
-        Client c2 = new Client("Luiz");
-        Client c3 = new Client("Daniel");
+        List<Client> clientList = new ArrayList<>();
 
         clientList.add(c1);
         clientList.add(c2);
         clientList.add(c3);
 
-        Assertions.assertTrue(bank.getClients().equals(clientList));
+        Assertions.assertEquals(bank.getClients(), clientList);
     }
 
     @Test
     void shouldReturnAListOfAllAccounts(){
-        Client c1 = new Client("Maicon");
-        Client c2 = new Client("Luiz");
-        Client c3 = new Client("Daniel");
 
-        Account ac1 = new SavingAccount(c1);
-        Account ac2 = new CheckingAccount(c2);
-        Account ac3 = new SavingAccount(c3);
-        Account ac4 = new CheckingAccount(c3);
-
-        ac1.deposit(100D);
-        ac2.deposit(100D);
-        ac3.deposit(100D);
-        ac4.deposit(100D);
-
-        List<Account> accountList = new ArrayList<Account>();
+        List<Account> accountList = new ArrayList<>();
         accountList.add(ac1);
         accountList.add(ac2);
         accountList.add(ac3);
         accountList.add(ac4);
 
-        Assertions.assertTrue(bank.getAllAccounts().equals(accountList));
+        Assertions.assertEquals(bank.getAllAccounts(), accountList);
     }
 
     @Test
-    void shouldReturnTheValueOfAllDepositedMoney(){
+    void shouldReturnTheValueOfAllDepositedMoney() throws NoValueException, NegativeValueException,
+            InsufficientBalanceException {
         Assertions.assertEquals(400D, bank.getAllDepositedMoney());
         List<Account> accountList = bank.getAllAccounts();
         accountList.get(0).withdraw(100D);
         Assertions.assertEquals(300D, bank.getAllDepositedMoney());
+    }
+
+    @Test
+    void shouldReturnClientAlreadyRegisteredException() {
+        Assertions.assertThrows(ClientAlreadyRegisteredException.class, () -> bank.addClient(c3));
+    }
+
+    @Test
+    void shouldReturnClientNotFountException() {
+        Client victim = new Client("Ronaldo");
+        Assertions.assertThrows(ClientNotFoundException.class, () -> bank.removeClient(victim));
     }
 
 }
