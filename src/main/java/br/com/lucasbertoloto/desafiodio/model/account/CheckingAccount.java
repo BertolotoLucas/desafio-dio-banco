@@ -6,20 +6,25 @@ import br.com.lucasbertoloto.desafiodio.model.Client;
 import java.util.Objects;
 
 public class CheckingAccount extends Account{
-    private final long identification;
+    private Double monthlyFee;
 
-    public CheckingAccount(Client client) throws MaxNumberQuantityCheckingAccountsReachedException,
-            MaxNumberQuantityAccountsReachedException, MaxNumberQuantitySavingAccountsReachedException,
-            AddingSameAccountException, AccountWithAnotherClientException {
-        this.client = client;
-        this.balance = 0D;
-        client.addAccount(this);
-        IDENTIFICATION = IDENTIFICATION + 1;
-        this.identification =  IDENTIFICATION;
+    public CheckingAccount(Double monthlyFee) {
+        super();
+        this.monthlyFee = monthlyFee;
     }
 
-    public long getIdentification() {
-        return identification;
+    public Double getMonthlyFee() {
+        return monthlyFee;
+    }
+
+    public void setMonthlyFee(Double monthlyFee) {
+        this.monthlyFee = monthlyFee;
+    }
+
+    public void transfer(Double value, Account to) throws NoValueException, NegativeValueException,
+            InsufficientBalanceException {
+        to.deposit(value);
+        this.withdraw(value);
     }
 
     @Override
@@ -27,21 +32,22 @@ public class CheckingAccount extends Account{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CheckingAccount that = (CheckingAccount) o;
-        return identification == that.identification;
+        return this.getIdentification() == that.getIdentification();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(identification);
+        return Objects.hash(this.getIdentification());
     }
 
     @Override
     public String toString() {
         return "CheckingAccount{" +
-                "identification=" + identification +
+                "identification=" + this.getIdentification() +
                 ", agency=" + AGENCY +
                 ", client=" + client.getName() +
                 ", balance=" + balance +
+                ", monthlyFee=" + monthlyFee +
                 '}';
     }
 
