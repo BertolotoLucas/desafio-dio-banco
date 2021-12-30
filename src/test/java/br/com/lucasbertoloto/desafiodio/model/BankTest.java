@@ -23,7 +23,7 @@ public class BankTest {
     private Account ac4;
 
     @BeforeEach
-    void initialize() throws NoValueException, NegativeValueException,
+    void initialize() throws InvalidNameException, NoValueException, NegativeValueException,
             MaxNumberQuantityCheckingAccountsReachedException, MaxNumberQuantityAccountsReachedException,
             MaxNumberQuantitySavingAccountsReachedException, AddingSameAccountException,
             AccountWithAnotherClientException, ClientAlreadyRegisteredException {
@@ -50,6 +50,12 @@ public class BankTest {
         bank.addClient(c1);
         bank.addClient(c2);
         bank.addClient(c3);
+    }
+
+    @Test
+    void shouldChangeTheNameOfTheBank() throws InvalidNameException {
+        bank.setName("MySecondBank");
+        Assertions.assertEquals("MySecondBank", bank.getName());
     }
 
     @Test
@@ -85,12 +91,53 @@ public class BankTest {
     }
 
     @Test
+    void shouldReturnInvalidNameException() {
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas/bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas!bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas@bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas#bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas$bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas%bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas¨bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas&bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas*bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas(bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas)bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas-bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas_bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas+bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas=bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas[bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas]bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas{bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas}bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas^bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas~bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas,bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas.bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas<bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas>bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas;bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas:bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas?bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas|bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas\\bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas'bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas\"bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas1bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucasºbertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucasªbertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas°bertoloto"));
+        Assertions.assertThrows(InvalidNameException.class, () -> bank.setName("Lucas\"bertoloto"));
+    }
+
+    @Test
     void shouldReturnClientAlreadyRegisteredException() {
         Assertions.assertThrows(ClientAlreadyRegisteredException.class, () -> bank.addClient(c3));
     }
 
     @Test
-    void shouldReturnClientNotFountException() {
+    void shouldReturnClientNotFountException() throws InvalidNameException {
         Client victim = new Client("Ronaldo");
         Assertions.assertThrows(ClientNotFoundException.class, () -> bank.removeClient(victim));
     }

@@ -2,7 +2,9 @@ package br.com.lucasbertoloto.desafiodio.model;
 
 import br.com.lucasbertoloto.desafiodio.exception.ClientAlreadyRegisteredException;
 import br.com.lucasbertoloto.desafiodio.exception.ClientNotFoundException;
+import br.com.lucasbertoloto.desafiodio.exception.InvalidNameException;
 import br.com.lucasbertoloto.desafiodio.model.account.Account;
+import br.com.lucasbertoloto.desafiodio.util.ValidateName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +17,8 @@ public class Bank {
     private String name;
     private final List<Client> clients;
 
-    public Bank(String name) {
-        this.name = name;
+    public Bank(String name) throws InvalidNameException {
+        validateBankName(name);
         identification = IDENTIFICATION++;
         clients = new ArrayList<>();
     }
@@ -33,22 +35,31 @@ public class Bank {
         return clients;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws InvalidNameException {
+        validateBankName(name);
+    }
+
+    private void validateBankName(String name) throws InvalidNameException {
+        name = name.trim();
+        ValidateName.validate(name);
         this.name = name;
     }
 
     public void addClient(Client client) throws ClientAlreadyRegisteredException {
         for (Client c : clients)
             if (c.equals(client))
-                throw new ClientAlreadyRegisteredException();
+                throw new ClientAlreadyRegisteredException(this, client);
         clients.add(client);
+        client.setBank(this);
     }
 
     public void removeClient(Client client) throws ClientNotFoundException {
         for (Client c : clients)
-            if (c.equals(client))
+            if (c.equals(client)) {
                 clients.remove(client);
-        throw new ClientNotFoundException();
+                client.setBank(null);
+            }
+        throw new ClientNotFoundException(client);
     }
 
     public List<Account> getAllAccounts() {
