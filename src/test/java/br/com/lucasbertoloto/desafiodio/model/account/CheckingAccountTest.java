@@ -11,7 +11,7 @@ public class CheckingAccountTest {
     private Account ac;
 
     @BeforeEach
-    void initialize() throws MaxNumberQuantityCheckingAccountsReachedException,
+    void initialize() throws InvalidNameException, MaxNumberQuantityCheckingAccountsReachedException,
             MaxNumberQuantityAccountsReachedException, MaxNumberQuantitySavingAccountsReachedException,
             AddingSameAccountException, AccountWithAnotherClientException {
         client = new Client("Maycon");

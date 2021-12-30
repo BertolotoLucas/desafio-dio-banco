@@ -1,8 +1,6 @@
 package br.com.lucasbertoloto.desafiodio.model.account;
 
-import br.com.lucasbertoloto.desafiodio.exception.InsufficientBalanceException;
-import br.com.lucasbertoloto.desafiodio.exception.NegativeValueException;
-import br.com.lucasbertoloto.desafiodio.exception.NoValueException;
+import br.com.lucasbertoloto.desafiodio.exception.*;
 import br.com.lucasbertoloto.desafiodio.model.Client;
 
 public abstract class Account {
@@ -54,7 +52,7 @@ public abstract class Account {
         else {
             int j = value.compareTo(balance);
             if(j > 0)
-                throw new InsufficientBalanceException();
+                throw new InsufficientBalanceException(this, value);
             else {
                 balance = balance - value;
             }

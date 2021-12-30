@@ -1,7 +1,6 @@
 package br.com.lucasbertoloto.desafiodio.model.account;
 
 import br.com.lucasbertoloto.desafiodio.exception.*;
-import br.com.lucasbertoloto.desafiodio.model.Client;
 
 import java.util.Objects;
 
@@ -42,10 +41,15 @@ public class CheckingAccount extends Account{
 
     @Override
     public String toString() {
+        String clientName;
+        if (client == null)
+            clientName = "Null";
+        else
+            clientName = client.getName();
         return "CheckingAccount{" +
                 "identification=" + this.getIdentification() +
                 ", agency=" + AGENCY +
-                ", client=" + client.getName() +
+                ", client=" + clientName +
                 ", balance=" + balance +
                 ", monthlyFee=" + monthlyFee +
                 '}';
